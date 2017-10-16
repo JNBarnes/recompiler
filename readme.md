@@ -2,19 +2,19 @@
 
 ![DolphinDemoScreenshot](/_images/xbox_remcompiler.jpg)
 
-The idea is simple: *what if you could take the Xbox360 game and run it on your PC?* Is this even possible in principle? I was pondering this question few years ago and that should not come as a supprise that there are some obvious technical difficulties in getting this done:
+The idea is simple: *what if you could take the Xbox360 game and run it on your PC?* Is this even possible in principle? I was pondering this question few years ago and that should not come as a suprise that there are some obvious technical difficulties in getting this done:
 
 - **Different CPUs** - Xbox360 uses PowerPC based CPU, our PCs are based on x86 architexture. They are different in so many ways that I don't even know where to start :) PowerPC is RISC based, has shitloads of registers but very simple instructions. x86 is totally different on the other hand - not so many registers and many more instructions that are more complicated (addressing modes...). It's obvious that a simple transcription is not feasible.
 
 - **Memory Layout** - Xbox360 uses BigEndian byte ordering, x86 CPUs use LittleEndian. To be compatible with incoming data that is being read from files and read/written into the memory all memory based operands must be byteswapped. This may pose a significant performance issue.
 
-- **Encrypted executable image** - Yup, for various reasons the executables on Xbox360 are encrypted. There are some cleaver guys in Russia though that figured how :)
+- **Encrypted executable image** - Yup, for various reasons the executables on Xbox360 are encrypted. There are some clever guys in Russia though that figured how :)
 
 - **Different and outdated GPU architecture** - If we want to see any graphics rendered the GPU needs to be emulated. Ther are two hard nuts to crack: first, the shaders we see will be complied into the GPU compatible format, no HLSL on input, sorry. Those shaders will have to be reverse engineered as well. Secondly, the Xbox360 GPU was using ~10MB of internal memory called EDRAM that was serving as a temporary storage of render target for the duration of rendering. Although some card today still use similar concept this is never exposed directly to the user. Since there a lot of differnt ways people used the EDRAM on Xbox this part has to be emulated. To be honest probably differently for every game.
 
-- **Inlining of graphics/kernel functions** - Some of the functions used while compiling the executable were inlined directly into the compiled code making it much harder to write a simple API level wrapper. This kills the dream of making "function level" wrapper where we could just go and wrap the "d3d->DrawPrimitive" call directly. Nope, this is not going ot happen.
+- **Inlining of graphics/kernel functions** - Some of the functions used while compiling the executable were inlined directly into the compiled code making it much harder to write a simple API level wrapper. This kills the dream of making "function level" wrapper where we could just go and wrap the "d3d->DrawPrimitive" call directly. Nope, this is not going to happen.
 
-Forunatelly, every problem is solvable and the answard is ***YES*** in principle. If you want to know how, keep reading :)
+Forunatelly, every problem is solvable and the answer is ***YES*** in principle. If you want to know how, keep reading :)
 
 ## Current state of the project
 
